@@ -13,10 +13,31 @@ function createTodoItem(todo) {
     const todoElem = document.createElement('li');
     todoElem.innerHTML = todo.task;
     todosElem.append(todoElem);
+
+   todoElem.addEventListener('click', () => {
+       console.log(todo);
+
+       /* 
+       1. ta bort vald todo från arrayen (använd filter() eller splice()  )
+       2. sara den nya arrayen till localstorage
+       */ 
+
+       //nedan raderar ett element i arrayen
+
+       todoElem.remove();
+       let todos = JSON.parse(localStorage.getItem("myTodos"))
+       let newlist = todos.filter((todo) => todo.task !== todoElem.innerHTML) //Filtrera bort det vi just klickat på (klickat bort)
+       console.log(newlist)
+       displayTodos(newlist)
+       saveToLocalStorage(newlist)
+
+   }); 
+        
 }
 
 
 function displayTodos(todos) {
+    todosElem.innerHTML = "";
     for(const todo of todos) {
         console.log(todo);
         createTodoItem(todo);
@@ -24,8 +45,7 @@ function displayTodos(todos) {
 }
 
 function saveToLocalStorage(todos) {
-    localStorage.setItem('myTodos', JSON.parse.stringify(todos));
-
+    localStorage.setItem('myTodos', JSON.stringify(todos));
 }
 
 
@@ -35,10 +55,8 @@ async function getTodos() {
 
     console.log(data);
     displayTodos(data.todos);
-    saveToLocalStorage(data.todo);
+    saveToLocalStorage(data.todos);
 }
-
-
 
 if (todosFromStorage) {
     console.log(todosFromStorage);
